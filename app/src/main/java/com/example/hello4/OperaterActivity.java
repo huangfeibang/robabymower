@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,9 +18,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.hello4.fragment.BottonFragment;
+
 import java.util.Calendar;
 
-public class OperaterActivity extends AppCompatActivity {
+public class OperaterActivity extends AppCompatActivity implements BottonFragment.OnFragmentInteractionListener {
 
     private Button mBtnmove_now;
     private Button auto_charge;
@@ -38,110 +41,14 @@ public class OperaterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operator);
         initToolBar();//初始化toolbar
-
-        mBtnmove_now = ((Button) findViewById(R.id.btn_move));
-        mBtnmove_now.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent=new Intent(OperaterActivity.this,MoveActivity.class);
-                startActivity(intent);
-
-                //Toast.makeText(PendingActivity.this,"AutoCharge", Toast.LENGTH_SHORT).show();
-            }
-        });
-        auto_charge = ((Button) findViewById(R.id.btn_auto));
-        auto_charge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(OperaterActivity.this,"AutoCharge", Toast.LENGTH_SHORT).show();
-            }
-        });
-        map = ((Button) findViewById(R.id.btn_map));
-        map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(OperaterActivity.this,MoveActivity.class);
-                startActivity(intent);
-                Toast.makeText(OperaterActivity.this, "Mapping", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        booking = (Button) findViewById(R.id.btn_booking);
-        booking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                int hourOfDay;
-                Calendar calendar = Calendar.getInstance();
-                hourOfDay = calendar.get(Calendar.HOUR);
-                int minute = calendar.get(Calendar.MINUTE);
-                TimePickerDialog pickerDialog = new TimePickerDialog(OperaterActivity.this, new TimePickerDialog.OnTimeSetListener() {
-
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        // TODO Auto-generated method stub
-                        Toast.makeText(OperaterActivity.this, "Will start at "+hourOfDay + ":" + minute, Toast.LENGTH_SHORT).show();
-                    }
-                }, hourOfDay, minute, true);
-
-                pickerDialog.show();
-
-            }
-        });
-
-        home = (Button) findViewById(R.id.btn_home);
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(OperaterActivity.this,WaitingActivity.class);
-                startActivity(intent);
-                Toast.makeText(OperaterActivity.this, "home", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        device = (Button) findViewById(R.id.btn_device);
-        device.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(OperaterActivity.this,"device",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        feedback = (Button) findViewById(R.id.btn_feedback);
-        feedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(OperaterActivity.this,"feedback",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        manual = (Button) findViewById(R.id.btn_manual);
-        manual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final EditText et = new EditText(OperaterActivity.this);
-                new AlertDialog.Builder(OperaterActivity.this).setTitle("请输入密码")
-                        .setIcon(android.R.drawable.sym_def_app_icon)
-                        .setView(et)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //按下确定键后的事件
-                                String passwd = et.getText().toString();
-                                if(passwd.equals("0000")){
-                                    Intent intent=new Intent(OperaterActivity.this,OperaterActivity.class);
-                                    startActivity(intent);
-                                }
-                                else{
-                                    Toast.makeText(getApplicationContext(),"密码错误",Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        }).setNegativeButton("取消",null).show();
-            }
-        });
+        BottonFragment framents = new BottonFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.buttom,framents).commitAllowingStateLoss();
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        Toast.makeText(OperaterActivity.this,"this is："+uri,Toast.LENGTH_SHORT).show();
+    }
     private void initToolBar() {
         Toolbar mToolbar = findViewById(R.id.toolbar_base);
         mToolbar.setTitle("");//这样设置的话，自带的标题就不会显示
